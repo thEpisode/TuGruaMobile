@@ -14,12 +14,17 @@ using TuGrua.Core.Entities;
 using TuGrua.Core.Enums;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Threading;
 
 namespace TuGrua
 {
     public class MainPage : ContentPage
     {
-        public ContentPage NavigationPage { get; set; }
+        private ManualResetEvent allDone = new ManualResetEvent(false);
+
+        private byte[] _dataToPost;
+
+        public ContentPage ContentPage { get; set; }
 
         private CustomButton _loginButton;
         private CustomEntry _emailText;
@@ -29,7 +34,7 @@ namespace TuGrua
             SetElements();
 
             // The root page of your application
-            NavigationPage = new ContentPage
+            ContentPage = new ContentPage
             {
                 Content = new StackLayout
                 {
@@ -53,44 +58,39 @@ namespace TuGrua
         {
             if (!string.IsNullOrWhiteSpace(_emailText.Text) && !string.IsNullOrWhiteSpace(_passText.Text))
             {
-                Authentication auth = null;
-                if (Device.OS == TargetPlatform.Android)
-                {
-                    auth = await LoginCross(_emailText.Text, _passText.Text);
-                }
-                else if (Device.OS == TargetPlatform.WinPhone)
-                {
-                    auth = await LoginWindowsPhone(_emailText.Text, _passText.Text);
-                }
+                await LoginCross(_emailText.Text, _passText.Text);
+            }
+        }
 
-                if (auth != null)
+        private async Task AuthenticationProcess(Authentication auth)
+        {
+            if (auth != null)
+            {
+                switch (auth.Role)
                 {
-                    switch (auth.Role)
-                    {
-                        case Role.Admin:
-                            {
-                                var page = new TuGrua.AdminApp(auth);
-                                Navigation.InsertPageBefore(page, this);
-                                await Navigation.PopAsync().ConfigureAwait(false);
-                                break;
-                            }
-                        case Role.Driver:
-                            {
-                                var page = new TuGrua.DriverView(auth);
-                                Navigation.InsertPageBefore(page, this);
-                                await Navigation.PopAsync().ConfigureAwait(false);
-                                break;
-                            }
-                        case Role.Requester:
-                            {
-                                var page = new TuGrua.RequestService(auth);
-                                Navigation.InsertPageBefore(page, this);
-                                await Navigation.PopAsync().ConfigureAwait(false);
-                                break;
-                            }
-                        default:
+                    case Role.Admin:
+                        {
+                            var page = new TuGrua.AdminApp(auth);
+                            Navigation.InsertPageBefore(page, this);
+                            await Navigation.PopAsync().ConfigureAwait(false);
                             break;
-                    }
+                        }
+                    case Role.Driver:
+                        {
+                            var page = new TuGrua.DriverView(auth);
+                            Navigation.InsertPageBefore(page, this);
+                            await Navigation.PopAsync().ConfigureAwait(false);
+                            break;
+                        }
+                    case Role.Requester:
+                        {
+                            var page = new TuGrua.RequestService(auth);
+                            Navigation.InsertPageBefore(page, this);
+                            await Navigation.PopAsync().ConfigureAwait(false);
+                            break;
+                        }
+                    default:
+                        break;
                 }
             }
         }
@@ -115,7 +115,7 @@ namespace TuGrua
             };
         }
 
-        async Task<Authentication> LoginWindowsPhone(string email, string password)
+        async Task<Authentication> LoginCross(string email, string password)
         {
             User user = new User(true);
 
@@ -129,112 +129,69 @@ namespace TuGrua
             StringBuilder postData = new StringBuilder();
             postData.Append("email=" + System.Uri.EscapeDataString(email) + "&");
             postData.Append("password=" + System.Uri.EscapeDataString(password) + "&");
-            var data = Encoding.UTF8.GetBytes(postData.ToString());
+            byte[] data = Encoding.UTF8.GetBytes(postData.ToString());
 
             request.Method = "POST";
             request.ContentType = "application/x-www-form-urlencoded";
             //request.ContentLength = data.Length;
             request.Headers["Content-Length"] = data.Length.ToString();
-            try
-            {
-                using (var stream = await request.GetRequestStreamAsync())
-                {
-                    await stream.WriteAsync(data, 0, data.Length);
-                }
 
-                using (WebResponse response = await request.GetResponseAsync())
-                {
-                    using (var stream = response.GetResponseStream())
-                    {
-                        var rawJson = new StreamReader(stream).ReadToEnd();
-                        var result = JObject.Parse(rawJson);
-
-                        bool success = result["success"].ToObject<bool>();
-                        if (!success)
-                        {
-                            await DisplayAlert("Aviso", (string)result["message"], "OK");
-                        }
-                        else {
-                            return new Authentication()
-                            {
-                                Token = result["token"].ToObject<string>(),
-                                UserId = result["userId"].ToObject<string>(),
-                                Role = (Role)(result["role"].ToObject<int>()),
-                                Email = email,
-                                Status = result["status"].ToObject<int>(),
-                                DetailedUserId = result["detailedUserId"].ToObject<DetailedUser>()
-                            };
-                        }
-                    }
-                }
-            }
-            catch (System.Net.WebException)
-            {
-
-            }
+            // start the asynchronous operation
+            request.BeginGetRequestStream(new AsyncCallback(GetRequestStreamCallback), request);
 
             return null;
         }
 
-        async Task<Authentication> LoginCross(string email, string password)
+        private async void GetRequestStreamCallback(IAsyncResult asynchronousResult)
         {
-            User user = new User(true);
+            HttpWebRequest request = (HttpWebRequest)asynchronousResult.AsyncState;
 
-            var request = await Task.Run(() => {
-                return System.Net.WebRequest.Create(
-                    TuGrua.Core.Backend.Constants.UriServer +
-                    TuGrua.Core.Backend.Constants.UriApi +
-                    TuGrua.Core.Backend.Constants.UriAuthenticate);
-            });
+            // End the operation
+            Stream stream = request.EndGetRequestStream(asynchronousResult);
 
-            StringBuilder postData = new StringBuilder();
-            postData.Append("email=" + System.Uri.EscapeDataString(email) + "&");
-            postData.Append("password=" + System.Uri.EscapeDataString(password) + "&");
-            var data = Encoding.UTF8.GetBytes(postData.ToString());
+            await stream.WriteAsync(_dataToPost, 0, _dataToPost.Length);
 
-            request.Method = "POST";
-            request.ContentType = "application/x-www-form-urlencoded";
-            request.ContentLength = data.Length;
-            try
+            stream.Dispose();
+
+            // Start the asynchronous operation to get the response
+            request.BeginGetResponse(new AsyncCallback(GetResponseCallback), request);
+        }
+
+        private async void GetResponseCallback(IAsyncResult asynchronousResult)
+        {
+            HttpWebRequest request = (HttpWebRequest)asynchronousResult.AsyncState;
+
+            // End the operation
+            HttpWebResponse response = (HttpWebResponse)request.EndGetResponse(asynchronousResult);
+            Stream streamResponse = response.GetResponseStream();
+            
+            var rawJson = new StreamReader(streamResponse).ReadToEnd();
+            var result = JObject.Parse(rawJson);
+
+            bool success = result["success"].ToObject<bool>();
+            if (!success)
             {
-                using (var stream = await request.GetRequestStreamAsync())
-                {
-                    await stream.WriteAsync(data, 0, data.Length);
-                }
-
-                using (WebResponse response = await request.GetResponseAsync())
-                {
-                    using (var stream = response.GetResponseStream())
-                    {
-                        JsonValue jsonDoc = await Task.Run(() => JsonObject.Load(stream));
-                        //Console.Out.WriteLine("Response: {0}", jsonDoc.ToString ());
-
-                        JsonObject result = jsonDoc as JsonObject;
-                        bool success = (bool)result["success"];
-                        if (!success)
-                        {
-                            await DisplayAlert("Aviso", (string)result["message"], "OK");
-                        }
-                        else {
-                            return new Authentication()
-                            {
-                                Token = (string)result["token"],
-                                UserId = (string)result["userId"],
-                                Role = (Role)((int)result["role"]),
-                                Email = email,
-                                Status = (int)result["status"],
-                                DetailedUserId = JsonConvert.DeserializeObject<DetailedUser>(((object)result["detailedUserId"]).ToString())
-                            };
-                        }
-                    }
-                }
+                await AuthenticationProcess(null);
+                await DisplayAlert("Aviso", (string)result["message"], "OK");
             }
-            catch (System.Net.WebException)
-            {
-
+            else {
+                await AuthenticationProcess(new Authentication()
+                {
+                    Token = result["token"].ToObject<string>(),
+                    UserId = result["userId"].ToObject<string>(),
+                    Role = (Role)(result["role"].ToObject<int>()),
+                    Email = _emailText.Text,
+                    Status = result["status"].ToObject<int>(),
+                    DetailedUserId = result["detailedUserId"].ToObject<DetailedUser>()
+                });
             }
 
-            return null;
+            // Close the stream object
+            streamResponse.Dispose();
+            
+            // Release the HttpWebResponse
+            response.Dispose();
+            
         }
     }
 }
