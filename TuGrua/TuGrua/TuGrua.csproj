@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -30,8 +30,29 @@
     <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Core\Backend\Constants.cs" />
+    <Compile Include="Core\Backend\Socket.cs" />
+    <Compile Include="Core\Entities\Admin.cs" />
+    <Compile Include="Core\Entities\Authentication.cs" />
+    <Compile Include="Core\Entities\BackendMessage.cs" />
+    <Compile Include="Core\Entities\Crane.cs" />
+    <Compile Include="Core\Entities\DetailedUser.cs" />
+    <Compile Include="Core\Entities\Driver.cs" />
+    <Compile Include="Core\Entities\Requester.cs" />
+    <Compile Include="Core\Entities\Service.cs" />
+    <Compile Include="Core\Entities\User.cs" />
+    <Compile Include="Core\Enums\DriverStatus.cs" />
+    <Compile Include="Core\Enums\Role.cs" />
+    <Compile Include="Core\Enums\SocketStatus.cs" />
+    <Compile Include="Core\Services\Geolocation\IGeolocator.cs" />
+    <Compile Include="Core\Services\Geolocation\Position.cs" />
+    <Compile Include="Core\Services\Geolocation\PositionExtensions.cs" />
+    <Compile Include="Extensions\CustomEntry.cs" />
     <Compile Include="TuGrua.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Views\Admin\AdminApp.cs" />
+    <Compile Include="Views\Driver\DriverView.cs" />
+    <Compile Include="Views\Requester\RequestService.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="..\packages\Xamarin.Forms.1.3.3.6323\build\portable-win+net45+wp80+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets" Condition="Exists('..\packages\Xamarin.Forms.1.3.3.6323\build\portable-win+net45+wp80+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets')" />
@@ -46,4 +67,5 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
 </Project>
