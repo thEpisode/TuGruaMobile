@@ -44,7 +44,7 @@ namespace TuGrua
             // The root page of your application
             TuGrua.MainPage mainPage = new TuGrua.MainPage();
             NavigationPage.SetHasNavigationBar(mainPage, false);
-            MainPage = new NavigationPage(mainPage);
+			MainPage = new NavigationPage(mainPage.GetPage());
         }
 
         public void InitializeSocket()

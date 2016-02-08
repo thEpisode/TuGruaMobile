@@ -29,6 +29,7 @@ namespace TuGrua
         private CustomButton _loginButton;
         private CustomEntry _emailText;
         private CustomEntry _passText;
+
         public MainPage()
         {
             SetElements();
@@ -53,6 +54,11 @@ namespace TuGrua
 
             _loginButton.Clicked += _loginButton_Clicked;
         }
+
+		public ContentPage GetPage()
+		{
+			return ContentPage;
+		}
 
         private async void _loginButton_Clicked(object sender, EventArgs e)
         {
@@ -129,12 +135,13 @@ namespace TuGrua
             StringBuilder postData = new StringBuilder();
             postData.Append("email=" + System.Uri.EscapeDataString(email) + "&");
             postData.Append("password=" + System.Uri.EscapeDataString(password) + "&");
-            byte[] data = Encoding.UTF8.GetBytes(postData.ToString());
+			_dataToPost = Encoding.UTF8.GetBytes(postData.ToString());
 
             request.Method = "POST";
             request.ContentType = "application/x-www-form-urlencoded";
             //request.ContentLength = data.Length;
-            request.Headers["Content-Length"] = data.Length.ToString();
+
+			//request.Headers["Content-Length"] = _dataToPost.Length.ToString();
 
             // start the asynchronous operation
             request.BeginGetRequestStream(new AsyncCallback(GetRequestStreamCallback), request);

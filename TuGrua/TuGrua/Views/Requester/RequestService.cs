@@ -41,7 +41,6 @@ namespace TuGrua
             set { _myPosition = value; }
         }
 
-
         public RequestService (Authentication auth)
 		{
             App.OnSocketEvent += App_OnSocketEvent;
