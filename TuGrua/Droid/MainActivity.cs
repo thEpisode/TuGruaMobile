@@ -10,7 +10,11 @@ using Android.OS;
 
 namespace TuGrua.Droid
 {
-	[Activity (Label = "TuGrua.com", Icon = "@drawable/icon", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
+	[Activity (Label = "TuGrua.co", 
+		Icon = "@drawable/icon", 
+		/*MainLauncher = true, */
+		ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation, 
+		ScreenOrientation = ScreenOrientation.Portrait)]
 	public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsApplicationActivity
 	{
 		protected override void OnCreate (Bundle bundle)
@@ -19,8 +23,9 @@ namespace TuGrua.Droid
 
 			global::Xamarin.Forms.Forms.Init (this, bundle);
 
+			Xamarin.FormsMaps.Init(this, bundle);
+
 			LoadApplication (new App ());
 		}
 	}
 }
-

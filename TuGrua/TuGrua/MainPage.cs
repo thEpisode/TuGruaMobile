@@ -77,22 +77,32 @@ namespace TuGrua
                     case Role.Admin:
                         {
                             var page = new TuGrua.AdminApp(auth);
-                            Navigation.InsertPageBefore(page, this);
-                            await Navigation.PopAsync().ConfigureAwait(false);
+							Device.BeginInvokeOnMainThread(() =>
+							{
+								ContentPage.Navigation.InsertPageBefore(page, ContentPage);
+								ContentPage.Navigation.PopAsync().ConfigureAwait(false);
+							});
+						
                             break;
                         }
                     case Role.Driver:
                         {
                             var page = new TuGrua.DriverView(auth);
-                            Navigation.InsertPageBefore(page, this);
-                            await Navigation.PopAsync().ConfigureAwait(false);
+							Device.BeginInvokeOnMainThread(() =>
+							{
+								ContentPage.Navigation.InsertPageBefore(page, ContentPage);
+								ContentPage.Navigation.PopAsync().ConfigureAwait(false);
+							});
                             break;
                         }
                     case Role.Requester:
                         {
                             var page = new TuGrua.RequestService(auth);
-                            Navigation.InsertPageBefore(page, this);
-                            await Navigation.PopAsync().ConfigureAwait(false);
+							Device.BeginInvokeOnMainThread(() =>
+							{
+								ContentPage.Navigation.InsertPageBefore(page, ContentPage);
+								ContentPage.Navigation.PopAsync().ConfigureAwait(false);
+							});
                             break;
                         }
                     default:
@@ -178,19 +188,30 @@ namespace TuGrua
             bool success = result["success"].ToObject<bool>();
             if (!success)
             {
+				// Close the stream object
+				streamResponse.Dispose();
+
+				// Release the HttpWebResponse
+				response.Dispose();
+
                 await AuthenticationProcess(null);
                 await DisplayAlert("Aviso", (string)result["message"], "OK");
             }
             else {
-                await AuthenticationProcess(new Authentication()
-                {
-                    Token = result["token"].ToObject<string>(),
-                    UserId = result["userId"].ToObject<string>(),
-                    Role = (Role)(result["role"].ToObject<int>()),
-                    Email = _emailText.Text,
-                    Status = result["status"].ToObject<int>(),
-                    DetailedUserId = result["detailedUserId"].ToObject<DetailedUser>()
-                });
+				Authentication auth = new Authentication () {
+					Token = result ["token"].ToObject<string> (),
+					UserId = result ["userId"].ToObject<string> (),
+					Role = (Role)(result ["role"].ToObject<int> ()),
+					Email = _emailText.Text,
+					Status = result ["status"].ToObject<int> (),
+					DetailedUserId = result ["detailedUserId"].ToObject<DetailedUser> ()
+				};
+				// Close the stream object
+				streamResponse.Dispose();
+
+				// Release the HttpWebResponse
+				response.Dispose();
+				await AuthenticationProcess(auth);
             }
 
             // Close the stream object

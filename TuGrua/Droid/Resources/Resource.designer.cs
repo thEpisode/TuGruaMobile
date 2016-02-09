@@ -3480,8 +3480,11 @@ namespace TuGrua.Droid
 			// aapt resource value: 0x7f02007c
 			public const int mr_ic_settings_light = 2130837628;
 			
+			// aapt resource value: 0x7f02007e
+			public const int notification_template_icon_bg = 2130837630;
+			
 			// aapt resource value: 0x7f02007d
-			public const int notification_template_icon_bg = 2130837629;
+			public const int splash = 2130837629;
 			
 			static Drawable()
 			{
@@ -4751,6 +4754,12 @@ namespace TuGrua.Droid
 			// aapt resource value: 0x7f090006
 			public const int CardView_Light = 2131296262;
 			
+			// aapt resource value: 0x7f090145
+			public const int CustomActionBarTheme = 2131296581;
+			
+			// aapt resource value: 0x7f090146
+			public const int MyActionBar = 2131296582;
+			
 			// aapt resource value: 0x7f090016
 			public const int Platform_AppCompat = 2131296278;
 			
@@ -5038,6 +5047,9 @@ namespace TuGrua.Droid
 			
 			// aapt resource value: 0x7f090001
 			public const int Theme_MediaRouter_Light = 2131296257;
+			
+			// aapt resource value: 0x7f090144
+			public const int Theme_Splash = 2131296580;
 			
 			// aapt resource value: 0x7f0900ee
 			public const int ThemeOverlay_AppCompat = 2131296494;
