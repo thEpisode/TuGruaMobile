@@ -10,7 +10,7 @@ using Android.OS;
 
 namespace TuGrua.Droid
 {
-	[Activity (Label = "TuGrua.co", 
+	[Activity ( 
 		Icon = "@drawable/icon", 
 		/*MainLauncher = true, */
 		ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation, 

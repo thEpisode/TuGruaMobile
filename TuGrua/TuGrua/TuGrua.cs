@@ -43,7 +43,7 @@ namespace TuGrua
 
             // The root page of your application
             TuGrua.MainPage mainPage = new TuGrua.MainPage();
-            NavigationPage.SetHasNavigationBar(mainPage, false);
+			NavigationPage.SetHasNavigationBar(mainPage.GetPage(), false);
 			MainPage = new NavigationPage(mainPage.GetPage());
         }
 

@@ -27,37 +27,26 @@ namespace TuGrua
         public ContentPage ContentPage { get; set; }
 
         private CustomButton _loginButton;
+		private CustomButton _registerButton;
         private CustomEntry _emailText;
         private CustomEntry _passText;
 
         public MainPage()
         {
-            SetElements();
-
-            // The root page of your application
-            ContentPage = new ContentPage
-            {
-                Content = new StackLayout
-                {
-                    Orientation = StackOrientation.Vertical,
-                    Spacing = 15,
-                    BackgroundColor = Color.Black,
-                    Padding = new Thickness(20, 0, 20, 20),
-                    VerticalOptions = LayoutOptions.StartAndExpand,
-                    Children = {
-                        _emailText,
-                        _passText,
-                        _loginButton
-                    }
-                }
-            };
+			SetElements();
 
             _loginButton.Clicked += _loginButton_Clicked;
+
+			_registerButton.Clicked += _registerButton_Clicked;
         }
 
 		public ContentPage GetPage()
 		{
 			return ContentPage;
+		}
+
+		private async void _registerButton_Clicked(object sender, EventArgs e)
+		{
 		}
 
         private async void _loginButton_Clicked(object sender, EventArgs e)
@@ -117,6 +106,10 @@ namespace TuGrua
             {
                 Text = "Entrar"
             };
+			_registerButton = new CustomButton
+			{
+				Text = "Registrarse"
+			};
             _emailText = new CustomEntry
             {
                 Name = "emailText",
@@ -129,6 +122,26 @@ namespace TuGrua
                 Placeholder = "Contraseña",
                 IsPassword = true
             };
+
+			// The root page of your application
+			ContentPage = new ContentPage
+			{
+				Content = new StackLayout
+				{
+					Orientation = StackOrientation.Vertical,
+					Spacing = 15,
+					BackgroundColor = Color.Black,
+					Padding = new Thickness(20, 0, 20, 20),
+					VerticalOptions = LayoutOptions.StartAndExpand,
+					Children = {
+						_emailText,
+						_passText,
+						_loginButton
+					}
+				}
+			};
+
+			ContentPage.BackgroundImage = "gruaBack.jpg";
         }
 
         async Task<Authentication> LoginCross(string email, string password)
