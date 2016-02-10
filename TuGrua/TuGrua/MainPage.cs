@@ -45,8 +45,13 @@ namespace TuGrua
 			return ContentPage;
 		}
 
-		private async void _registerButton_Clicked(object sender, EventArgs e)
+		private void _registerButton_Clicked(object sender, EventArgs e)
 		{
+			Device.BeginInvokeOnMainThread(() =>
+				{
+					ContentPage.Navigation.InsertPageBefore(new Register(), ContentPage);
+					ContentPage.Navigation.PopAsync().ConfigureAwait(false);
+				});
 		}
 
         private async void _loginButton_Clicked(object sender, EventArgs e)
@@ -57,7 +62,7 @@ namespace TuGrua
             }
         }
 
-        private async Task AuthenticationProcess(Authentication auth)
+		private async void AuthenticationProcess(Authentication auth)
         {
             if (auth != null)
             {
@@ -136,7 +141,8 @@ namespace TuGrua
 					Children = {
 						_emailText,
 						_passText,
-						_loginButton
+						_loginButton,
+						_registerButton
 					}
 				}
 			};
@@ -207,7 +213,7 @@ namespace TuGrua
 				// Release the HttpWebResponse
 				response.Dispose();
 
-                await AuthenticationProcess(null);
+                AuthenticationProcess(null);
                 await DisplayAlert("Aviso", (string)result["message"], "OK");
             }
             else {
@@ -224,7 +230,7 @@ namespace TuGrua
 
 				// Release the HttpWebResponse
 				response.Dispose();
-				await AuthenticationProcess(auth);
+				AuthenticationProcess(auth);
             }
 
             // Close the stream object
