@@ -49,8 +49,8 @@ namespace TuGrua
 		{
 			Device.BeginInvokeOnMainThread(() =>
 				{
-					ContentPage.Navigation.InsertPageBefore(new Register(), ContentPage);
-					ContentPage.Navigation.PopAsync().ConfigureAwait(false);
+					ContentPage.Navigation.PushAsync(new Register());
+					//ContentPage.Navigation.PopAsync().ConfigureAwait(false);
 				});
 		}
 
@@ -135,7 +135,7 @@ namespace TuGrua
 				{
 					Orientation = StackOrientation.Vertical,
 					Spacing = 15,
-					BackgroundColor = Color.Black,
+					BackgroundColor = Color.FromRgba(0,0,0,230),
 					Padding = new Thickness(20, 0, 20, 20),
 					VerticalOptions = LayoutOptions.StartAndExpand,
 					Children = {
