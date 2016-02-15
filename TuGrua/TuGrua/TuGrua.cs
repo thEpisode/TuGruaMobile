@@ -39,15 +39,14 @@ namespace TuGrua
 
         public App ()
         {
-            InitializeSocket();
-
+            
             // The root page of your application
             TuGrua.MainPage mainPage = new TuGrua.MainPage();
 			NavigationPage.SetHasNavigationBar(mainPage.GetPage(), false);
 			MainPage = new NavigationPage(mainPage.GetPage());
         }
 
-        public void InitializeSocket()
+        public async Task InitializeSocket()
         {
             socketManager = new Core.Backend.Socket.IO("http://tugruacobackend.cloudapp.net:3000/");
             io = socketManager.GetSocket();

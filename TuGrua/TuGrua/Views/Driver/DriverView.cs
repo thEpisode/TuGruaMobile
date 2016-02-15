@@ -1,5 +1,5 @@
 ﻿using System;
-
+using System.Collections.Generic;
 using Xamarin.Forms;
 using TuGrua.Core.Entities;
 using Xamarin.Forms.Maps;
@@ -69,26 +69,29 @@ namespace TuGrua
 		private void FromBackendMessage(JToken data)
 		{
 			JToken values = null;
-			switch ((string)data.SelectToken ("Command")) {
+			string command = (string)data.SelectToken ("Command");
+			switch (command) {
 			case "RequestJob":
 				values = (JToken)data.SelectToken ("Values");
 				if (values != null) {
-					if (((String)values.SelectToken ("CraneId")).Equals (_driver._id)) {
+					string craneId = (String)values.SelectToken ("CraneId");
+					Crane crane = _driver.Cranes.Find (x => x.Id.Equals (craneId));
+					if (crane != null) {
 						JToken details = (JToken)values.SelectToken ("Details");
 
 						Device.BeginInvokeOnMainThread (async() => {
 							bool accept = await DisplayAlert ("Nuevo trabajo", "Tienes un nuevo trabajo en asistencia de " + (String)details.SelectToken ("Type"), "Aceptar trabajo", "Rechazar");
 
 							if (accept) {
-								_confirmedJob.Text = (string)details.SelectToken("Details");
+								_confirmedJob.Text = (string)details.SelectToken ("Details");
 								object response = new
-								{
-									Requester = details.SelectToken("RequesterId"),
-									Driver = _driver
-								};
-								JObject jsonObject = JObject.FromObject(response);
+						{
+							Requester = details.SelectToken ("RequesterId"),
+							Driver = _driver
+						};
+								JObject jsonObject = JObject.FromObject (response);
 
-								App.io.Emit("ConfirmedJob", jsonObject);
+								App.io.Emit ("ConfirmedJob", jsonObject);
 							}
 						});
 					}
@@ -103,7 +106,9 @@ namespace TuGrua
         {
 			Device.BeginInvokeOnMainThread(() =>
 				{
-					_status.Text = "Estado: " + socketStatus;
+					if (_status != null) {
+						_status.Text = "Estado: " + socketStatus;
+					}
 				});
         }
 

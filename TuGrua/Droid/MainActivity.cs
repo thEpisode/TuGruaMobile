@@ -17,7 +17,8 @@ namespace TuGrua.Droid
 		ScreenOrientation = ScreenOrientation.Portrait)]
 	public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsApplicationActivity
 	{
-		protected override void OnCreate (Bundle bundle)
+		public App MainApp;
+		protected override async void OnCreate (Bundle bundle)
 		{
 			base.OnCreate (bundle);
 
@@ -25,7 +26,11 @@ namespace TuGrua.Droid
 
 			Xamarin.FormsMaps.Init(this, bundle);
 
-			LoadApplication (new App ());
+			MainApp = new App ();
+
+			LoadApplication (MainApp);
+
+			await MainApp.InitializeSocket ();
 		}
 	}
 }

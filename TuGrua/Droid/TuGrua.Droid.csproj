@@ -38,6 +38,12 @@
     <WarningLevel>4</WarningLevel>
     <AndroidUseSharedRuntime>false</AndroidUseSharedRuntime>
     <ConsolePause>false</ConsolePause>
+    <AndroidLinkMode>Full</AndroidLinkMode>
+    <AndroidKeyStore>True</AndroidKeyStore>
+    <AndroidSigningKeyStore>C:\Users\CamiloRodríguez\AppData\Local\Xamarin\Mono for Android\Keystore\TuGruaCertificate\TuGruaCertificate.keystore</AndroidSigningKeyStore>
+    <AndroidSigningStorePass>TuGrua123</AndroidSigningStorePass>
+    <AndroidSigningKeyAlias>TuGruaCertificate</AndroidSigningKeyAlias>
+    <AndroidSigningKeyPass>TuGrua123</AndroidSigningKeyPass>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />

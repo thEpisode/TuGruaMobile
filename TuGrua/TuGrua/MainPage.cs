@@ -214,7 +214,10 @@ namespace TuGrua
 				response.Dispose();
 
                 AuthenticationProcess(null);
-                await DisplayAlert("Aviso", (string)result["message"], "OK");
+				Device.BeginInvokeOnMainThread(() =>
+					{
+                		DisplayAlert("Aviso", (string)result["message"], "OK");
+					});
             }
             else {
 				Authentication auth = new Authentication () {

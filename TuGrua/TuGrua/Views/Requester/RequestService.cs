@@ -69,7 +69,7 @@ namespace TuGrua
             }
         }
 
-        private async void FromBackendMessage(JToken data)
+        private void FromBackendMessage(JToken data)
         {
             JToken values = null;
             switch ((string)data.SelectToken("Command"))
@@ -84,6 +84,12 @@ namespace TuGrua
                         DisplayAlert("Conductor confirmado", "La grúa con el servicio que solicitaste está en camino", "Ok");
                     });
                     break;
+				case "NoCranesAvailable":
+					Device.BeginInvokeOnMainThread (() => {
+						_requestServiceButton.IsEnabled = false;
+						DisplayAlert ("No hay vehículos disponibles", "En este momento no hay grúas disponibles, intenta más tarde.", "Ok");
+					});
+					break;
                 default:
                     break;
             }
@@ -163,7 +169,7 @@ namespace TuGrua
                                     "\nAsistencia en: " + popupRequest;
                 object assistence = new
                 {
-                    RequesterId = _requester._id,
+                    Id = _requester._id,
                     Details = details,
                     Position = _myPosition,
                     Type = popupRequest
