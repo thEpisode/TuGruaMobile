@@ -150,6 +150,8 @@ namespace TuGrua
             stack.Children.Add(_cancelServiceButton);
 
 			Content = stack;
+
+			ThisPage.Title = "TuGrua.co";
 		}
 
         private void _cancelServiceButton_Clicked(object sender, EventArgs e)

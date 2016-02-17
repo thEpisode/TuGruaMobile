@@ -20,7 +20,7 @@ using Android.Gms.Maps;
 [assembly:ExportRenderer(typeof(TuGrua.DriverView), typeof(TuGrua.Droid.DriverView))]
 namespace TuGrua.Droid
 {
-	[Activity (Label = "DriverView", Theme = "@style/CustomActionBarTheme")]			
+	[Activity (Label = "TuGrua.co", Theme = "@style/CustomActionBarTheme")]			
 	public class DriverView : PageRenderer
 	{
 		private IGeolocator _geolocator;

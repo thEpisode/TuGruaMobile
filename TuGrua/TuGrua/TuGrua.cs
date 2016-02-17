@@ -43,7 +43,11 @@ namespace TuGrua
             // The root page of your application
             TuGrua.MainPage mainPage = new TuGrua.MainPage();
 			NavigationPage.SetHasNavigationBar(mainPage.GetPage(), false);
-			MainPage = new NavigationPage(mainPage.GetPage());
+			NavigationPage navigationPage = new NavigationPage(mainPage.GetPage());
+			navigationPage.BarBackgroundColor = Color.FromRgb (242, 148, 0);
+			navigationPage.BarTextColor = Color.Black;
+			navigationPage.Title = "TuGrua.co";
+			MainPage = navigationPage;
         }
 
         public async Task InitializeSocket()

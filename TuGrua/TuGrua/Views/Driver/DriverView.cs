@@ -197,6 +197,8 @@ namespace TuGrua
 			stack.Children.Add (_confirmedJob);
 
 			Content = stack;
+
+			ThisPage.Title = "TuGrua.co";
 		}
 
 		void _changeStatus_Clicked (object sender, EventArgs e)
