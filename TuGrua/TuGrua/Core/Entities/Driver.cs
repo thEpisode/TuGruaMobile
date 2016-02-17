@@ -13,7 +13,7 @@ namespace TuGrua.Core.Entities
 {
 	public class Driver : DetailedUser
 	{
-        public List<Crane> Cranes { get; set; }
+		public List<Crane> Cranes { get; set; }
 
 		private byte[] _dataToGet;
 
@@ -56,13 +56,13 @@ namespace TuGrua.Core.Entities
 							}
 						}
 
-						catch (Exception ex)
+						catch (Exception)
 						{
 
 						}
 						completion.SetResult(driver);
 					}, null);
-			} catch (Exception ex) 
+			} catch (Exception) 
 			{
 				
 			}

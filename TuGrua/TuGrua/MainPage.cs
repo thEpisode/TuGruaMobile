@@ -220,6 +220,7 @@ namespace TuGrua
 					});
             }
             else {
+				var detailedUser = result ["detailedUserId"];
 				Authentication auth = new Authentication () {
 					Token = result ["token"].ToObject<string> (),
 					UserId = result ["userId"].ToObject<string> (),
@@ -228,6 +229,8 @@ namespace TuGrua
 					Status = result ["status"].ToObject<int> (),
 					DetailedUserId = result ["detailedUserId"].ToObject<DetailedUser> ()
 				};
+
+
 				// Close the stream object
 				streamResponse.Dispose();
 

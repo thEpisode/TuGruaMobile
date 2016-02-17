@@ -154,7 +154,7 @@ namespace TuGrua
 
         private void _cancelServiceButton_Clicked(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         async void _requestServiceButton_Clicked (object sender, EventArgs e)

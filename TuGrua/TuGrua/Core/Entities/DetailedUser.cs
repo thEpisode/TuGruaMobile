@@ -1,5 +1,6 @@
 ﻿using System;
 using TuGrua.Core.Enums;
+using System.Collections.Generic;
 
 namespace TuGrua.Core.Entities
 {
@@ -12,6 +13,7 @@ namespace TuGrua.Core.Entities
         public string LastName { get; set; }
         public int GeneralCalification { get; set; }
         private bool _test { get; set; }
+
         public DetailedUser ()
 		{
             

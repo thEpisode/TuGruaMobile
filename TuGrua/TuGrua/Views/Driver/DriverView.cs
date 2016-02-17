@@ -45,6 +45,8 @@ namespace TuGrua
 			validateUser ();
 
 			SetUI ();
+
+			_currentUserStatus = 1;
 		}
 
         private void App_OnSocketEvent(object sender, JToken e)
@@ -75,23 +77,28 @@ namespace TuGrua
 				values = (JToken)data.SelectToken ("Values");
 				if (values != null) {
 					string craneId = (String)values.SelectToken ("CraneId");
-					Crane crane = _driver.Cranes.Find (x => x.Id.Equals (craneId));
+					Crane crane = _driver.Cranes.Find (x => x.CraneId.Equals (craneId));
 					if (crane != null) {
 						JToken details = (JToken)values.SelectToken ("Details");
-
+						string jobType = (String)values.SelectToken ("RequestType");
 						Device.BeginInvokeOnMainThread (async() => {
-							bool accept = await DisplayAlert ("Nuevo trabajo", "Tienes un nuevo trabajo en asistencia de " + (String)details.SelectToken ("Type"), "Aceptar trabajo", "Rechazar");
+							bool accept = await DisplayAlert ("Nuevo trabajo", "Tienes un nuevo trabajo en asistencia de " + jobType, "Aceptar trabajo", "Rechazar");
 
 							if (accept) {
 								_confirmedJob.Text = (string)details.SelectToken ("Details");
 								object response = new
-						{
-							Requester = details.SelectToken ("RequesterId"),
-							Driver = _driver
-						};
+								{
+									Requester = details.SelectToken ("RequesterId"),
+									Driver = _driver
+								};
 								JObject jsonObject = JObject.FromObject (response);
 
 								App.io.Emit ("ConfirmedJob", jsonObject);
+
+								_changeStatus.IsEnabled = false;
+								_changeStatus.Text = "Ocupado";
+								_changeStatus.TextColor = Color.Black;
+								_changeStatus.BackgroundColor = Color.Red;
 							}
 						});
 					}

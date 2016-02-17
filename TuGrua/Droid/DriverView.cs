@@ -59,7 +59,7 @@ namespace TuGrua.Droid
                 {
                     object position = new
                     {
-                        Id = TuGrua.DriverView.ThisPage.Driver._id,
+						Id = TuGrua.DriverView.ThisPage.Driver.Cranes.FirstOrDefault().CraneId,
                         Position = e.Position
                     };
                     JObject jsonObject = JObject.FromObject(position);

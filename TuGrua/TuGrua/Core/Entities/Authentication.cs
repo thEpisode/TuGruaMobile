@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using TuGrua.Core.Enums;
 
 namespace TuGrua.Core.Entities
