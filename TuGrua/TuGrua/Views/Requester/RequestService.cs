@@ -23,6 +23,7 @@ namespace TuGrua
 		public Label _listenLongitude;
 		public Button _requestServiceButton;
         public Button _cancelServiceButton;
+		public StackLayout _buttonContainer;
 
         // Atributes
         private bool _canRequest;
@@ -120,13 +121,15 @@ namespace TuGrua
 			_listenLatitude = new Label ();
 			_listenLongitude = new Label ();
             _status = new Label();
+			_status.Text = "Estado: Conectado";
 
             // Creating Buttons
             _requestServiceButton = new Button();
-			_requestServiceButton.Text = "Tomar servicio";
+			_requestServiceButton.Text = "  Tomar servicio  ";
 			_requestServiceButton.BackgroundColor = Color.FromRgb(253, 194, 44);
             _requestServiceButton.TextColor = Color.FromRgb(0, 0, 0);
             _requestServiceButton.IsEnabled = false;
+
 
             _cancelServiceButton = new Button();
             _cancelServiceButton.Text = "Cancelar servicio";
@@ -138,6 +141,10 @@ namespace TuGrua
             _requestServiceButton.Clicked += _requestServiceButton_Clicked;
             _cancelServiceButton.Clicked += _cancelServiceButton_Clicked;
 
+			_buttonContainer = new StackLayout{ Spacing = 5 };
+			_buttonContainer.Padding = new Thickness (75, 5, 75, 5);
+			_buttonContainer.Children.Add (_requestServiceButton);
+
             // Setting layout
             var stack = new StackLayout { Spacing = 0 };
 
@@ -146,10 +153,11 @@ namespace TuGrua
 			//stack.Children.Add (_listenLatitude);
 			//stack.Children.Add (_listenLongitude);
 			stack.Children.Add(_map);
-			stack.Children.Add (_requestServiceButton);
+			stack.Children.Add (_buttonContainer);
             stack.Children.Add(_cancelServiceButton);
 
 			Content = stack;
+			Content.BackgroundColor = Color.FromRgb (74, 79, 84);
 
 			ThisPage.Title = "  TuGrua.co";
 		}
