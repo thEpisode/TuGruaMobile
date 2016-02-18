@@ -45,8 +45,8 @@ namespace TuGrua
 			NavigationPage.SetHasNavigationBar(mainPage.GetPage(), false);
 			NavigationPage navigationPage = new NavigationPage(mainPage.GetPage());
 			navigationPage.BarBackgroundColor = Color.FromRgb (242, 148, 0);
-			navigationPage.BarTextColor = Color.Black;
-			navigationPage.Title = "TuGrua.co";
+			navigationPage.BarTextColor = Color.FromRgb(0,0,0);
+
 			MainPage = navigationPage;
         }
 

@@ -198,7 +198,7 @@ namespace TuGrua
 
 			Content = stack;
 
-			ThisPage.Title = "TuGrua.co";
+			ThisPage.Title = "  TuGrua.co";
 		}
 
 		void _changeStatus_Clicked (object sender, EventArgs e)

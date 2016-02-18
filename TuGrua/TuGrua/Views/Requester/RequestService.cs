@@ -141,17 +141,17 @@ namespace TuGrua
             // Setting layout
             var stack = new StackLayout { Spacing = 0 };
 
-            stack.Children.Add(_status);
-            stack.Children.Add (_listenStatus);
-			stack.Children.Add (_listenLatitude);
-			stack.Children.Add (_listenLongitude);
+			stack.Children.Add(_status);
+			//stack.Children.Add (_listenStatus);
+			//stack.Children.Add (_listenLatitude);
+			//stack.Children.Add (_listenLongitude);
 			stack.Children.Add(_map);
 			stack.Children.Add (_requestServiceButton);
             stack.Children.Add(_cancelServiceButton);
 
 			Content = stack;
 
-			ThisPage.Title = "TuGrua.co";
+			ThisPage.Title = "  TuGrua.co";
 		}
 
         private void _cancelServiceButton_Clicked(object sender, EventArgs e)
